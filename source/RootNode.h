@@ -1,56 +1,57 @@
+// RootNode.h
 #include "Node.h"
 #include "Config.h"
 #include "MenuScreen.h"
 #include "SimpleButton.h"
 
-class RootNode : public Node // inherits from node
+class RootNode : public Node // publicly inherits from node
 {
-    public:
-
+public:
+    // Constructor                                              // Initializer list
     RootNode(SDL_Renderer* renderer_in, Node* parentNode_in) : Node(renderer_in, parentNode_in)
     {
-        // Make screens
-        MenuScreen* rootNodeScreen1 = createMenuScreen();
-        MenuScreen* rootNodeScreen2 = createMenuScreen();
+        // first create screens for the node
+        MenuScreen* screen1 = createMenuScreen();
+        MenuScreen* screen2 = createMenuScreen();
 
-        // create images to put on screens
-        ArcadeTexture* rootNodeScreen1Background = createImage(renderer_in, "rootNodeImages/rootNodeScreenBackground.png", true);
-        ArcadeTexture* rootNodeScreen2Background = createImage(renderer_in, "rootNodeImages/rootNodeScreenBackground.png", true);
+        // create images and text to put on the screen using an ArcadeTexture object
+        ArcadeTexture* screen1Background = createImage(renderer_in, "rootNodeImages/rootNodeScreenBackground.png", true);
+        ArcadeTexture* screen2Background = createImage(renderer_in, "rootNodeImages/rootNodeScreenBackground.png", true);
 
-        // add the images to the screen
-        rootNodeScreen1->addTextureToScreen(rootNodeScreen1Background);
-        rootNodeScreen2->addTextureToScreen(rootNodeScreen2Background);
+        ArcadeTexture* screen1Text = createSimpleText(renderer_in, "fonts/retro/italic.ttf", 100, "screen 1", 255, 255, 0);
+        screen1Text->setPosition(windowWidth / 2 - screen1Text->getW() / 2, 25);
 
-        // add some text to the screen
-        ArcadeTexture* mainMenuText = createSimpleText(renderer_in, "fonts/retro/italic.ttf", 100, "SCREEN 1", 255, 255, 0);
-        mainMenuText->setPosition(windowWidth / 2 - mainMenuText->getW() / 2, 25);
+        ArcadeTexture* screen2Text = createSimpleText(renderer_in, "fonts/retro/italic.ttf", 100, "screen 2", 255, 255, 0);
+        screen2Text->setPosition(windowWidth / 2 - screen2Text->getW() / 2, 25);
 
-        ArcadeTexture* mainMenuText2 = createSimpleText(renderer_in, "fonts/retro/italic.ttf", 100, "SCREEN 2", 255, 255, 0);
-        mainMenuText2->setPosition(windowWidth / 2 - mainMenuText2->getW() / 2, 25);
+        // add the images and text to the screen after creating them
+        screen1->addTextureToScreen(screen1Background);
+        screen1->addTextureToScreen(screen1Text);
 
-        // add text to the screen
-        rootNodeScreen1->addTextureToScreen(mainMenuText);
-        rootNodeScreen2->addTextureToScreen(mainMenuText2);
+        screen2->addTextureToScreen(screen2Background);
+        screen2->addTextureToScreen(screen2Text);
         
-        // create a button and set position
-        SimpleButton* button1 = createSimpleTextButton(renderer_in, "fonts/pixel/classic.ttf", 30, "go to screen 2", 255, 0, 0);
-        button1->setButtonPosition(windowWidth / 2 - button1->getWidth()/2,
-        mainMenuText->getY() * mainMenuText->getH() + 50);
+        // create a text button to put on screen1 and screen2 and set positions
+        SimpleButton* button1 = createSimpleTextButton(renderer_in, "fonts/pixel/classic.ttf", 30, "gotoscreen2", 255, 0, 0);
+        button1->setButtonPosition(windowWidth / 2 - button1->getWidth() / 2, screen1Text->getY() + screen1Text->getH() + 50);
 
-        button1->setButtonAction(createAction(MOVE_SCREENS, rootNodeScreen2));
+        SimpleButton* button2 = createSimpleTextButton(renderer_in, "fonts/pixel/classic.ttf", 30, "gotoscreen1", 255, 0, 0);
+        button2->setButtonPosition(windowWidth / 2 - button2->getWidth() / 2, screen2Text->getY() + screen2Text->getH() + 50);
 
-        // add the button to the screen
-        rootNodeScreen1->addButtonToScreen(button1);
+        // give these buttons an action
+        button1->setButtonAction(createAction(MOVE_SCREENS, screen2));
 
-        SimpleButton* button2 = createSimpleTextButton(renderer_in, "fonts/pixel/classic.ttf", 30, "go to screen 2", 255, 0, 0);
-        button2->setButtonPosition(windowWidth / 2 - button2->getWidth()/2,
-        mainMenuText2->getY() * mainMenuText2->getH() + 50);
+        button2->setButtonAction(createAction(MOVE_SCREENS, screen1));
+        
+        // add the buttons to their screens
+        screen1->addButtonToScreen(button1);
+        screen2->addButtonToScreen(button2);
 
-        button2->setButtonAction(createAction(MOVE_SCREENS, rootNodeScreen1));
+        // add the screens to the node
+        this->addScreen(screen1);
+        this->addScreen(screen2);
 
-        //this->addScreen();
-        //this->addScreen();
-
-        //this->
+        // tell the node the current screen
+        this->setCurrentScreen(screen1);
     }
 };

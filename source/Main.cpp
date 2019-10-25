@@ -1,4 +1,3 @@
-
 // main.cpp
 #include "SDL.h"
 #include "SDL_mixer.h"
@@ -69,8 +68,7 @@ int main(int argc, char* argv[])
 	else
 	{
 		bool quit = false;
-		// make root node
-		RootNode currentNode(arcadeSystemRenderer, nullptr);
+		RootNode currentNode(arcadeSystemRenderer, nullptr); // make root node
 		while (!quit)
 		{	
 			// handle events on queue until empty
@@ -78,8 +76,7 @@ int main(int argc, char* argv[])
 			while (SDL_PollEvent(&e) != 0)
 			{
 				currentNode.update(&e);
-				// user requests quit by clicking window X
-				if (e.type == SDL_QUIT)
+				if (e.type == SDL_QUIT) // user requests quit by clicking window X
 				{
 					quit = true;
 				}
