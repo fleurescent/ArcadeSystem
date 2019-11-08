@@ -3,13 +3,18 @@
 #include "Config.h"
 #include "MenuScreen.h"
 #include "SimpleButton.h"
+#include "GameNode.h"
 
 class RootNode : public Node // publicly inherits from node
 {
+private:
+GameNode* gameNode;
 public:
     // Constructor                                              // Initializer list
     RootNode(SDL_Renderer* renderer_in, Node* parentNode_in) : Node(renderer_in, parentNode_in)
     {
+        gameNode = new GameNode(getRenderer(), this);
+        children.push_back(gameNode);
         // first create screens for the node
         MenuScreen* screen1 = createMenuScreen();
         MenuScreen* screen2 = createMenuScreen();
