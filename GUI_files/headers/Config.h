@@ -23,7 +23,7 @@ enum geometryPosition
 
 struct point
 {
-        int x;
+    int x;
 	int y;
 };
 
